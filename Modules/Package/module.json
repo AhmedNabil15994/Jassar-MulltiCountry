@@ -1,0 +1,15 @@
+{
+    "name": "Package",
+    "alias": "package",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Package\\Providers\\PackageServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "composer.php"
+    ],
+    "requires": []
+}

@@ -1,0 +1,145 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Toucart API",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/areas/countries": {
+            "get": {
+                "tags": [
+                    "Areas"
+                ],
+                "summary": "List all countries.",
+                "description": "Display a listing of all countries",
+                "operationId": "countries",
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of countries."
+                    }
+                }
+            }
+        },
+        "/api/areas/cities/{countryId}": {
+            "get": {
+                "tags": [
+                    "Areas"
+                ],
+                "summary": "List cities by country ID.",
+                "description": "Display a listing of country cities.",
+                "operationId": "cities",
+                "parameters": [
+                    {
+                        "name": "countryId",
+                        "in": "path",
+                        "description": "ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of cities."
+                    }
+                }
+            }
+        },
+        "/api/areas/states/{countryId}": {
+            "get": {
+                "operationId": "Modules\\Area\\Http\\Controllers\\WebService\\AreaController::states",
+                "parameters": [
+                    {
+                        "name": "countryId",
+                        "in": "path",
+                        "description": "ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of states."
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User login",
+                "description": "Generate an access token for the user.",
+                "operationId": "postLogin",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "admin@tocaan.com",
+                                    "password": "123456789"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/api/user/profile": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "User profile",
+                "description": "Display the current user profile.",
+                "operationId": "profile",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

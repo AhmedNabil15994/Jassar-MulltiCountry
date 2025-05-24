@@ -1,0 +1,66 @@
+
+            <div class="row">
+                <div class="col-md-6 col-md-offset-4">
+
+                    <div class="form-group">
+
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline">
+                                    {{ __('setting::dashboard.settings.form.payment_gateway.payment_mode.test_mode') }}
+                                    <input onchange="paymentModeSwitcher('tap_switch','testModelData_tap')" type="radio" name="payment_gateway[tap][payment_mode]" value="test_mode"
+                                           @if (Setting::get('payment_gateway.tap.payment_mode') != 'live_mode')
+                                           checked
+                                            @endif>
+                                    <span></span>
+                                </label>
+                                <label class="mt-radio mt-radio-outline">
+                                    {{ __('setting::dashboard.settings.form.payment_gateway.payment_mode.live_mode') }}
+                                    <input  onchange="paymentModeSwitcher('tap_switch','liveModelData_tap')" type="radio" name="payment_gateway[tap][payment_mode]" value="live_mode"
+                                           @if (Setting::get('payment_gateway.tap.payment_mode') == 'live_mode')
+                                           checked
+                                            @endif>
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7 col-md-offset-2 tap_switch" id="testModelData_tap"
+                     style="{{ Setting::get('payment_gateway.tap.payment_mode') == 'live_mode' ? 'display: none': 'display: block' }}">
+
+                    <h3 class="page-title text-center">Tap Gateway ( Test Mode )</h3>
+
+                    {!! field()->text('payment_gateway[tap][test_mode][API_KEY]', 'API Key', Setting::get('payment_gateway.tap.test_mode.API_KEY') ?? '') !!}
+                </div>
+
+                <div class="col-md-7 col-md-offset-2 tap_switch" id="liveModelData_tap"
+                     style="{{ Setting::get('payment_gateway.tap.payment_mode') == 'live_mode' ? 'display: block': 'display: none' }}">
+
+                    <h3 class="page-title text-center">Tap Gateway ( Live Mode )</h3>
+
+                    {!! field()->text('payment_gateway[tap][live_mode][API_KEY]', 'API Key',  Setting::get('payment_gateway.tap.live_mode.API_KEY') ?? '') !!}
+
+                </div>
+                <div class="col-md-7 col-md-offset-2">
+                    @foreach (array_keys(config('laravellocalization.supportedLocales')) as $code)
+
+                        {!! field()->text('payment_gateway[tap][title_'.$code.']', __('setting::dashboard.settings.form.payment_gateway.payment_types.payment_title').'-'.$code ,
+                        Setting::get('payment_gateway.tap.title_'.$code)) !!}
+
+                    @endforeach
+                    {!! field()->checkBox('payment_gateway[tap][status]', __('setting::dashboard.settings.form.payment_gateway.payment_types.payment_status') , null , [
+                    (Setting::get('payment_gateway.tap.status') == 'on' ? 'checked' : '') => ''
+                    ]) !!}
+                    
+                    @include('core::dashboard.shared.file_upload', [
+                        'name' => 'images[tap_logo]',
+                        'imgUploadPreviewID' => 'settingFavicon',
+                        'image' => Setting::get('tap_logo') ?? null,
+                    ])
+                </div>
+            </div>

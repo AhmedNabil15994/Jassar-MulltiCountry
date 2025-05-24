@@ -1,0 +1,28 @@
+{
+    "name": "nwidart/package",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Package\\Providers\\PackageServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Package\\": ""
+        },
+        "classmap": [
+            "Database/Seeders"
+        ]
+    }
+}

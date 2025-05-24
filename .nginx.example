@@ -1,0 +1,63 @@
+##
+# Nginx Local Configuration
+##
+# 1. sudo nano /etc/nginx/sites-available/toucart-multitenancy
+# 2. Copy and paste the two server blocks below.
+# 3. sudo ln -s /etc/nginx/sites-available/toucart-multitenancy /etc/nginx/sites-enabled/
+# 4. sudo service nginx configtest
+# 5. sudo service nginx restart
+# 6. Now visit: http://www.toucart.127.0.0.1.xip.io
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name toucart.127.0.0.1.xip.io;
+    return 301 $scheme://www.toucart.127.0.0.1.xip.io$request_uri;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    # Add index.php to the list if you are using PHP
+    index index.php index.html index.htm;
+
+    server_name ~^(?<tenant>.+)\.toucart\.127\.0\.0\.1\.xip\.io$;
+
+    root /var/www/html/toucart/public;
+
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        # try_files $uri $uri/ =404;
+
+        # do the above, but fall back to PHP FPM instead of displaying a 404 page.
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # pass PHP scripts to FastCGI server
+    #
+    location ~ \.php$ {
+        # rewrite ^/(.*)/$ /$1 permanent;
+
+        fastcgi_param TENANT $tenant; # $_SERVER['TENANT']
+
+        include snippets/fastcgi-php.conf;
+    
+        # With php-fpm (or other unix sockets):
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+    #   # With php-cgi (or other tcp sockets):
+    #   fastcgi_pass 127.0.0.1:9000;
+
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+    }
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    location ~ /\.ht {
+        deny all;
+    }
+}
